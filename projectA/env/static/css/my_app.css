@@ -1,0 +1,9 @@
+body {
+    background-color: pink;
+}
+table {
+    width: 100%;
+}
+td, th {
+    border: 1px solid yellow;
+}
