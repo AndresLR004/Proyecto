@@ -2,6 +2,8 @@
 
 from flask import Flask, render_template, request, redirect, url_for
 from datetime import datetime 
+# import flask_sqlalchemy import SQLAlchemy
+
 import sqlite3
 
 connection = sqlite3.connect('database/ProyectoA.db')
@@ -39,7 +41,7 @@ def create_product():
 
         conn = sqlite3.connect(connection)
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO productos (nombre, precio) VALUES (?, ?)", (nombre, precio))
+        cursor.execute("INSERT INTO productos (nombre, precio) VALUES ($n, $n)", (nombre, precio))
         conn.commit()
         conn.close()
         return redirect(url_for('index'))
@@ -66,12 +68,12 @@ def update_product(id):
     if request.method == 'POST':
         nombre = request.form['nombre']
         precio = request.form['precio']
-        cursor.execute("UPDATE productos SET nombre = ?, precio = ? WHERE id = ?", (nombre, precio, id))
+        cursor.execute("UPDATE productos SET nombre = ($n), precio = ($p) WHERE id = ($i)", (nombre, precio, id))
         conn.commit()
         conn.close()
         return redirect(url_for('index'))
 
-    cursor.execute("SELECT * FROM productos WHERE id = ?", (id,))
+    cursor.execute("SELECT * FROM productos WHERE id = ($i)", (id,))
     producto = cursor.fetchone()
     conn.close()
 
@@ -87,12 +89,12 @@ def delete_product(id):
     cursor = conn.cursor()
 
     if request.method == 'POST':
-        cursor.execute("DELETE FROM productos WHERE id = ?", (id,))
+        cursor.execute("DELETE FROM productos WHERE id = ($i)", (id,))
         conn.commit()
         conn.close()
         return redirect(url_for('index'))
 
-    cursor.execute("SELECT * FROM productos WHERE id = ?", (id,))
+    cursor.execute("SELECT * FROM productos WHERE id = ($i)", (id,))
     producto = cursor.fetchone()
     conn.close()
 
