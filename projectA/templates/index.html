@@ -1,20 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/style.css">
-    <title>Index</title>
+    <title>Lista de Productos</title>
 </head>
 <body>
-    <header>
-        <p>Proyecto Flask</p>
-    </header>
-    <main>
-        <img src="/static/img/fondo.jpg" alt="">
-    </main>
-    <footer>
-
-    </footer>    
+    <h1>Lista de Productos</h1>
+    <ul>
+        {% for producto in productos %}
+            <li>{{ producto[1] }} - ${{ producto[2] }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('create_product') }}">Crear un nuevo producto</a>
 </body>
 </html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eliminar Producto</title>
+</head>
+<body>
+    <h1>Eliminar Producto</h1>
+    <form method="post">
+        <p>¿Estás seguro de que deseas eliminar este producto?</p>
+        <input type="hidden" name="id" value="{{ producto.id }}">
+        <input type="submit" value="Eliminar">
+    </form>
+    <a href="{{ url_for('index') }}">Cancelar</a>
+</body>
+</html>
