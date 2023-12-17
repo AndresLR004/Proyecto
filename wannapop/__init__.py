@@ -3,6 +3,8 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_principal import Principal
 from .helper_mail import MailManager
+from logging.handlers import RotatingFileHandler
+import logging
 
 db_manager = SQLAlchemy()
 login_manager = LoginManager()
@@ -15,12 +17,26 @@ def create_app():
 
     # Llegeixo la configuració del config.py de l'arrel
     app.config.from_object('config.Config')
+    
+    log_handler = RotatingFileHandler('app.log', maxBytes=10240, backupCount=3)
+    log_handler.setFormatter(logging.Formatter(
+    '%(asctime)s %(levelname)s: %(message)s '
+    '[in %(pathname)s:%(lineno)d]'
+    ))
+    log_handler.setLevel(logging.DEBUG)
+    app.logger.addHandler(log_handler)
+
+    log_level = app.config.get('LOG_LEVEL')
+    if log_level not in ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']:
+        raise ValueError('Nivell de registre no vàlid')
+    app.logger.setLevel(getattr(logging, log_level))
 
     # Inicialitza els plugins
     login_manager.init_app(app)
     db_manager.init_app(app)
     principal_manager.init_app(app)
     mail_manager.init_app(app)
+        
     
     with app.app_context():
         from . import commands, routes_main, routes_auth, routes_admin, routes_products, routes_category, routes_status
