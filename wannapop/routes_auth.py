@@ -29,7 +29,8 @@ def login():
             
             # aquí és crea la cookie
             login_user(user)
-            current_app.logger.debug('A value for debugging:' + current_user.name)
+            current_app.logger.debug('Lusuari está autenticat correctament' + current_user.name)
+            #
             # aquí s'actualitzen els rols que té l'usuari
             notify_identity_changed()
 

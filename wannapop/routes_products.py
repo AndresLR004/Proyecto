@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, abort
 from flask_login import current_user
 from werkzeug.utils import secure_filename
-from .models import Product, Category, Status
+from .models import Product, Category, Status, BlockedUser
 from .forms import ProductForm, DeleteForm
 from .helper_role import Action, perm_required
 from . import db_manager as db
@@ -21,10 +21,15 @@ def templates_processor():
 @products_bp.route('/products/list')
 @perm_required(Action.products_list)
 def product_list():
+    
+    blocked_user = BlockedUser.query.filter_by(user_id=current_user.id).first()
+    blocked_user = blocked_user is not None
+    
     # select amb join que retorna una llista de resultats
     products_with_category = db.session.query(Product, Category).join(Category).order_by(Product.id.asc()).all()
     
     return render_template('products/list.html', products_with_category = products_with_category)
+
 
 @products_bp.route('/products/create', methods = ['POST', 'GET'])
 @perm_required(Action.products_create)

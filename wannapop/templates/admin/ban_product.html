@@ -1,0 +1,25 @@
+{% extends 'layouts/_base.html' %}
+
+{% block title %}
+Bloqueo de Producto
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Bloquear Producto</h2>
+
+    <p>¿Estás seguro de que deseas bloquear el producto {{ product.name }}?</p>
+
+    <form method="post">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.reason.label }}
+            {{ form.reason(class="form-control", placeholder="Ingrese el motivo del bloqueo del producto") }}
+        </div>
+
+        <button type="submit" class="btn btn-danger">Sí, bloquear producto</button>
+        <a href="{{ url_for('admin_bp.product_list') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

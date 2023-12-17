@@ -12,13 +12,13 @@ CREATE TABLE categories (
 -- Crear la taula users
 CREATE TABLE users (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	name TEXT UNIQUE,
-	email TEXT UNIQUE,
-	role TEXT UNIQUE,
-	password TEXT,
+	name TEXT NOT NULL UNIQUE,
+	email TEXT NOT NULL UNIQUE,
+	role TEXT,
+	password TEXT NOT NULL,
+	verified INTEGER NOT NULL DEFAULT FALSE, -- SQLite no té booleans
 	created DATETIME NOT NULL DEFAULT (DATETIME('now')),
 	updated DATETIME NOT NULL DEFAULT (DATETIME('now'))
-
 );
 
 -- Crear la taula products
@@ -53,6 +53,14 @@ CREATE TABLE confirmed_orders (
 	created DATETIME NOT NULL DEFAULT (DATETIME('now')),
 	FOREIGN KEY (order_id) REFERENCES orders(id)
 );
+CREATE TABLE banned_products (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    product_id INTEGER NOT NULL,
+    reason TEXT,
+    created DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
 
 --
 -- Dades FAKE

@@ -23,8 +23,14 @@ Productes
 			<td>{{ product.price }}</td>
 			<td>{{ category.name }}</td>
 			<td>
-				<a href="/products/read/{{ product.id }}" alt="Visualitzar">👁️</a>
-			</td>
+                {% if banned_product and (current_user.is_admin_or_moderator() or current_user.id == product.seller_id) %}
+                    <a href="/products/read/{{ product.id }}" alt="Visualitzar">👁️</a>
+                {% endif %}
+                {% if not banned_product %}
+                    <a href="/products/read/{{ product.id }}" alt="Visualitzar">👁️</a>
+                {% endif %}
+
+            </td>
 			<td>
 				{% if current_user.is_action_allowed_to_product(Action.products_update, product) %}
 				<a href="/products/update/{{ product.id }}" alt="Editar">📝</a>
@@ -35,11 +41,22 @@ Productes
 				<a href="/products/delete/{{ product.id }}" alt="Eliminar">❌</a>
 				{% endif %}
 			</td>
+			<td>
+                {% if current_user.is_admin_or_moderator() %}
+                    {% if banned_product %}
+                        <form action="{{ url_for('admin_bp.unban_product', product_id=product.id)}}" method="post">
+                            <button class="btn btn-success btn-sm" type="submit">Desbanear</button>
+                        </form>
+                    {% else %}
+                        <a href="{{ url_for('admin_bp.ban_product', product_id=product.id) }}" class="btn btn-danger btn-sm">Banear</a>
+                    {% endif %}
+                {% endif %}
+            </td>
 		</tr>
 		{% endfor %}
 	</tbody>
 </table>
 {% if current_user.is_action_allowed_to_product(Action.products_create) %}
-<a class="btn btn-secondary btn-xl" href="/products/create">Crear un nou producte</a>
+	<a class="btn btn-secondary btn-xl" href="/products/create">Crear un nou producte</a>
 {% endif %}
 {% endblock %}

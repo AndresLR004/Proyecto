@@ -1,0 +1,25 @@
+{% extends 'layouts/_base.html' %}
+
+{% block title %}
+Bloqueo de Usuarios
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Bloquear Usuario</h2>
+
+    <p>¿Estás seguro de que deseas bloquear al usuario {{ user.name }}?</p>
+
+    <form method="post">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.message.label }}
+            {{ form.message(class="form-control", placeholder="Ingrese el motivo del bloqueo") }}
+        </div>
+
+        <button type="submit" class="btn btn-danger">Sí, bloquear usuario</button>
+        <a href="{{ url_for('admin_bp.admin_users') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

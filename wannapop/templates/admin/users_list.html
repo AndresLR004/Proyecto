@@ -20,11 +20,19 @@ Usuaris
             <td>{{ user.id }}</td>
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
-            <td>{{ user.role }}</td>
+            <td>{{ user.role }}</td>	
+			
+			<td>
+				{% if user.id in blocked_user %}
+					<a class="btn btn-secondary btn-sm" href="{{ url_for('admin_bp.unblock_user', user_id=user.id) }}">Desbloquear</a>
+				{% else %}
+					<a class="btn btn-danger btn-sm" href="{{ url_for('admin_bp.block_user', user_id=user.id) }}">Bloquear</a>
+				{% endif %}
+			</td>
 		</tr>
 		{% endfor %}
 	</tbody>
 </table>
-<a class="btn btn-outline-dark btn-xl" href="/admin">&#x3c;&#x3c; Tornar la pàgina d'administració</a>
+<a class="btn btn-dark btn-sm" href="{{ url_for('admin_bp.admin_index') }}">&#x3c;&#x3c; Tornar la pàgina d'administració</a>
 
 {% endblock %}

@@ -13,6 +13,7 @@ class User(UserMixin, db.Model):
     __password = db.Column("password", db.String, nullable=False)
     verified = db.Column(db.Integer, nullable=False)
     email_token = db.Column(db.String, nullable=True, server_default=None)
+    can_create = db.Column(db.Boolean, nullable=False, default=True)
     created = db.Column(db.DateTime, server_default=func.now())
     updated = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
 
@@ -92,3 +93,16 @@ class Status(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     slug = db.Column(db.String, nullable=False)
+    
+class BlockedUser(db.Model):
+    __tablename__ = "blocked_users"
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True, nullable=False)
+    message = db.Column(db.String, nullable=False)
+    created = db.Column(db.DateTime, server_default=func.now())
+    
+class BanProduct(db.Model):
+    __tablename__ = "banned_products"
+    product_id = db.Column(db.Integer, db.ForeignKey("products.id"), primary_key=True, nullable=False)
+    reason = db.Column(db.String, nullable=False)
+    created = db.Column(db.DateTime, server_default=func.now())
+    
